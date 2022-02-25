@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import './styles/style.css';
+import {useInfiniteScroll} from './services/useInfiniteScroll'
 
 function App() {
+  const [scrolled, setScrolled] = useState({
+    height: null,
+    top: null,
+    win: null,
+    offset: null,
+  });
+
+  const handleScroll = (e) => {
+    let scrollHeight = e.target.scrollHeight;
+    let scrollTop = e.target.scrollTop;
+    let winHeight = window.innerHeight;
+    let offSet = e.target.offsetHeight;
+
+    if (e.target.scrollHeight || e.target.scrollTop || window.innerHeight) {
+      setScrolled({
+        ...scrolled,
+        height: scrollHeight,
+        top: scrollTop,
+        win: winHeight,
+        offset: offSet,
+      });
+    }
+  };
+
+  const data = useInfiniteScroll(scrolled, 'measurements')
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="contentScroll" onScroll={handleScroll}>
+      {data.length > 0 && data.map(values => (
+        <ul>
+          <li>
+            <strong>Valor</strong> {values.value}
+          </li>
+        </ul>
+      ))}
     </div>
   );
 }

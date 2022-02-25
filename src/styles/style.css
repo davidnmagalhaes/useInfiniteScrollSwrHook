@@ -1,0 +1,8 @@
+.contentScroll {
+  width: 800px;
+  height: 400px;
+  background: #cfcfcf;
+  overflow: auto;
+  padding: 20px;
+  border-radius: 15px;
+}
